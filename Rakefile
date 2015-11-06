@@ -1,9 +1,13 @@
+ENV['APP_ENV'] ||= 'development'
+
 require 'bundler'
-Bundler.require(:default)
+Bundler.require(:default, ENV['APP_ENV'])
 $LOAD_PATH << File.join(__dir__, 'lib')
 
-require 'dotenv'
-Dotenv.load
+if %w(test development).include? ENV['APP_ENV']
+  require 'dotenv'
+  Dotenv.load
+end
 
 Rake.add_rakelib 'lib/tasks'
 
