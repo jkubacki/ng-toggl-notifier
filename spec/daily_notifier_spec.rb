@@ -11,7 +11,7 @@ describe DailyNotifier do
     end
     let(:daily_notifier) { described_class.new(weekly_reports, db) }
     let(:weekly_user_report) do
-      WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', working_time)
+      WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', true, working_time)
     end
     let(:weekly_reports) { [weekly_user_report] }
 
@@ -35,23 +35,27 @@ describe DailyNotifier do
       end
     end
 
-    context 'user worked more than 1 hour in a weekend day' do
+    context 'work at the weekend' do
       let(:working_time) { [nil, nil, nil, nil, nil, 3_600_000, nil, 3_600_000] }
 
-      it 'sends weekend notification on saturday' do
-        allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
-        expect(daily_notifier).to receive(:weekend_day_notification)
-        daily_notifier.call
+      context 'employee' do
+        it 'sends weekend notification' do
+          allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
+          expect(daily_notifier).to receive(:weekend_day_notification)
+          daily_notifier.call
+        end
       end
-    end
 
-    context 'user worked less than 1 hour in a weekend day' do
-      let(:working_time) { [nil, nil, nil, nil, nil, nil, 3_599_999, 3_599_999] }
+      context 'contractor' do
+        let(:weekly_user_report) do
+          WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', false, working_time)
+        end
 
-      it 'does not send weekend notification on sunday' do
-        allow(Date).to receive(:today) { Date.new(2015, 11, 1) }
-        expect(daily_notifier).not_to receive(:weekend_day_notification)
-        daily_notifier.call
+        it 'sends weekend notification' do
+          allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
+          expect(daily_notifier).not_to receive(:weekend_day_notification)
+          daily_notifier.call
+        end
       end
     end
   end

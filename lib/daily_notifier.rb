@@ -2,7 +2,6 @@ require 'pstore'
 require 'mailer'
 
 class DailyNotifier
-  WEEKEND_DAY_THRESHOLD = 1
   BUSINESS_DAY_THRESHOLD = 8
 
   STORE = File.join(File.expand_path('..', __dir__), 'store', 'daily.pstore')
@@ -24,17 +23,17 @@ class DailyNotifier
     weekly_reports.each do |report|
       case week_day
       when 0, 6
-        weekend_day_notification(report) if send_business_day_notification?(week_day, report)
+        weekend_day_notification(report) if send_weekend_day_notification?(week_day, report)
       else
-        business_day_notification(report) if send_weekend_day_notification?(week_day, report)
+        business_day_notification(report) if send_business_day_notification?(week_day, report)
       end
     end
   end
 
   private
 
-  def weekend_day_notification(user_report)
-    # TODO: Send email.
+  def weekend_day_notification(report)
+    Mailer.weekend_day_to_user(report.email, report: report)
     store_notification(report.email)
   end
 
@@ -44,11 +43,11 @@ class DailyNotifier
   end
 
   def send_weekend_day_notification?(week_day, report)
-    report.day_hours(week_day) >= BUSINESS_DAY_THRESHOLD && last_sent(report.email) < Date.today
+    report.contract && last_sent(report.email) < Date.today
   end
 
   def send_business_day_notification?(week_day, report)
-    report.day_hours(week_day) >= WEEKEND_DAY_THRESHOLD && last_sent(report.email) < Date.today
+    report.day_hours(week_day) >= BUSINESS_DAY_THRESHOLD && last_sent(report.email) < Date.today
   end
 
   def store_notification(email)
