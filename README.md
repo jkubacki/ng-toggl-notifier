@@ -35,5 +35,5 @@ SENDGRID_PASSWORD - SendGrid user password
 
 ### Testing
 ```
-bin/rake
+bin/rspec
 ```
