@@ -57,7 +57,7 @@ class DailyNotifier
     if sent.first
       sent.update(sent_at: Date.today)
     else
-      sent_daily.insert(emai: email, sent_at: Date.today)
+      sent_daily.insert(email: email, sent_at: Date.today)
     end
   end
 
