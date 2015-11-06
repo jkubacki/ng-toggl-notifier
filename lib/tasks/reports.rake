@@ -7,7 +7,7 @@ task :send_weekly => :environment do
   if Date.today.monday? || ENV['SEND_WEEKLY_EVERY_DAY'] == 'true'
     puts "Sending weekly..."
     report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'])
-    weekly_reports = report_client.weekly_user_reports
+    weekly_reports = report_client.weekly_user_reports(true)
     WeeklyNotifier.new(weekly_reports).call
     puts "done."
   end

@@ -9,9 +9,9 @@ class TogglReportsClient
     @company_name = company_name
   end
 
-  def weekly_user_reports
+  def weekly_user_reports(previous_week = false)
     return @weekly_users_report if defined?(@weekly_users_report)
-    monday = Date.today - (Date.today.wday - 1) % 7
+    monday = Date.today - (Date.today.wday - 1) % 7 - (previous_week ? 7 : 0)
     sunday = monday + 6
     query = {
       workspace_id: workspace['id'],
