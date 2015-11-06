@@ -22,7 +22,7 @@ class Mailer
   def self.render(data = {})
     template_name = caller[0][/`.*'/][1..-2]
     template_path = File.join(TEMPLATES_DIR, "#{template_name}.txt")
-    unless File.exist(template_path)
+    unless File.exist?(template_path)
       raise StandardError, "Template #{template_path} does not exist."
     end
     template = File.read(template_path)

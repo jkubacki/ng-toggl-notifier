@@ -1,4 +1,5 @@
 require 'pstore'
+require 'mailer'
 
 class DailyNotifier
   WEEKEND_DAY_THRESHOLD = 1
@@ -37,7 +38,7 @@ class DailyNotifier
   end
 
   def business_day_notification(report)
-    Mailer.send_daily_to_user(report.email, report)
+    Mailer.daily_to_user(report.email, report: report)
     store_notification(report.email)
   end
 
