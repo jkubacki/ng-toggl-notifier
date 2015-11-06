@@ -7,7 +7,7 @@ gem "rake"
 gem "sequel"
 gem "pg"
 
-group :development do
+group :development, :test do
   gem "rspec"
   gem "timecop"
   gem "dotenv"

@@ -1,5 +1,5 @@
 require 'weekly_notifier'
-require 'timecop'
+# require 'timecop'
 require 'mailer'
 
 describe WeeklyNotifier do
