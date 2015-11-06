@@ -43,7 +43,7 @@ class DailyNotifier
   end
 
   def send_weekend_day_notification?(week_day, report)
-    report.contract && last_sent(report.email) < Date.today
+    report.employee && last_sent(report.email) < Date.today
   end
 
   def send_business_day_notification?(week_day, report)

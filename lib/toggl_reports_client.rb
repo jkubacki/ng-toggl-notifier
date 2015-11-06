@@ -38,7 +38,8 @@ class TogglReportsClient
   def employment_contract_group_id
     return @employment_contract_group_id if defined?(@employment_contract_group_id)
     groups = workspace_groups(workspace['id'])
-    @employment_contract_group_id = groups.find { |g| g['name'].downcase == 'uop' }
+    contract_group = groups.find { |g| g['name'].downcase == 'uop' }
+    @employment_contract_group_id = contract_group.nil? ? nil : contract_group['id']
   end
 
   def users_data
