@@ -1,4 +1,6 @@
 require 'toggl_reports_client'
+require 'daily_notifier'
+require 'weekly_notifier'
 
 desc "Weekly reports"
 task :send_weekly => :environment do
