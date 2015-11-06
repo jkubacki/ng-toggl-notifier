@@ -19,6 +19,14 @@ class Mailer
     )
   end
 
+  def self.weekend_day_to_user(email, data = {})
+    Pony.mail(
+      to: email,
+      subject: 'Toggl weekend report',
+      body: render(data)
+    )
+  end
+
   def self.render(data = {})
     template_name = caller[0][/`.*'/][1..-2]
     template_path = File.join(TEMPLATES_DIR, "#{template_name}.txt")
