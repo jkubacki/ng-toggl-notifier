@@ -1,0 +1,5 @@
+Lista osób, które przepracowały w poprzednim tygodniu ponad 40 godzin:
+
+<% reports do |report| %>
+  <%= repot.user_name %>,<%= report.total_hours %>,<%= report.total_hours - 40 %>
+<% end %>
