@@ -10,6 +10,7 @@ gem "pg"
 group :development do
   gem "rspec"
   gem "timecop"
+  gem "dotenv"
 end
 
 ruby "2.2.3"

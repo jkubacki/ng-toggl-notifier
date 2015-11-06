@@ -2,6 +2,9 @@ require 'bundler'
 Bundler.require(:default)
 $LOAD_PATH << File.join(__dir__, 'lib')
 
+require 'dotenv'
+Dotenv.load
+
 Rake.add_rakelib 'lib/tasks'
 
 task :environment do
