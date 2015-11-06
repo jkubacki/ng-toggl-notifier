@@ -20,7 +20,7 @@ class TogglReportsClient
       until: sunday.strftime('%Y-%m-%d')
     }
     @weekly_users_report = HTTParty.get('/weekly', http_options(query: query))['data']
-      .map { |ur| WeeklyUserReport.build_from_api(ur, users_emails) }
+      .map { |ur| WeeklyUserReport.build_from_api(ur, users_data) }
   end
 
   private
@@ -30,11 +30,27 @@ class TogglReportsClient
       .find { |w| w['name'] == @company_name }
   end
 
-  def users_emails
-    return @users_emails if defined?(@users_emails)
-    @users_emails = HTTParty
+  def workspace_groups(workspace_id)
+    @workspace_groups ||=
+      HTTParty.get("/workspaces/#{workspace_id}/groups", http_options(data_api: true))
+  end
+
+  def employment_contract_group_id
+    return @employment_contract_group_id if defined?(@employment_contract_group_id)
+    groups = workspace_groups(workspace['id'])
+    @employment_contract_group_id = groups.find { |g| g['name'].downcase == 'uop' }
+  end
+
+  def users_data
+    return @users_data if defined?(@users_data)
+    @users_data = HTTParty
       .get("/workspaces/#{workspace['id']}/workspace_users", http_options(data_api: true))
-      .each_with_object({}) { |wu, hash| hash[wu['uid']] = wu['email'] }
+      .each_with_object({}) do |wu, hash|
+        hash[wu['uid']] = {
+          email: wu['email'],
+          employee: wu['group_ids'].include?(employment_contract_group_id)
+        }
+      end
   end
 
   def http_options(query: {}, data_api: false)

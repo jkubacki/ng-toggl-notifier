@@ -1,11 +1,12 @@
 class WeeklyUserReport
-  attr_reader :uid, :user_name, :email
+  attr_reader :uid, :user_name, :email, :contract
   MILISECONDS_PER_HOUR = 3_600_000
 
-  def initialize(uid, user_name, email, total_miliseconds)
+  def initialize(uid, user_name, email, contract, total_miliseconds)
     @uid = uid
     @user_name = user_name
     @email = email
+    @contract = contract
     @total_miliseconds = total_miliseconds
   end
 
@@ -14,7 +15,8 @@ class WeeklyUserReport
     new(
       uid,
       report_data['title']['user'],
-      users_emails[uid],
+      users_emails[uid].email,
+      users_emails[uid].employee,
       report_data['totals']
     )
   end

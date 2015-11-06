@@ -6,6 +6,7 @@ describe WeeklyUserReport do
       1,
       'John Doe',
       'john@doe.com',
+      false,
       [nil, 28_800_000, 28_800_000, 14_400_000, nil, nil, 14_400_000, 86_400_000])
   end
 
