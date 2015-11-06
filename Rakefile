@@ -6,7 +6,7 @@ Rake.add_rakelib 'lib/tasks'
 
 task :environment do
   Pony.options = {
-    :from => ENV['OFFICE_EMAIL']
+    :from => ENV['OFFICE_EMAIL'],
     :via => :smtp,
     :via_options => {
       :address => 'smtp.sendgrid.net',
