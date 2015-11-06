@@ -1,12 +1,15 @@
 require 'daily_notifier'
 
 describe DailyNotifier do
-  after do
-    File.delete DailyNotifier::STORE if File.exist?(DailyNotifier::STORE)
-  end
-
   describe '#call' do
-    let(:daily_notifier) { described_class.new(weekly_reports) }
+    let(:db) do
+      db = double(:db)
+      row = double(:row)
+      allow(db).to receive(:[]).and_return(row)
+      allow(row).to receive(:where).and_return([])
+      db
+    end
+    let(:daily_notifier) { described_class.new(weekly_reports, db) }
     let(:weekly_user_report) do
       WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', working_time)
     end

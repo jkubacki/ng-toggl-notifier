@@ -16,9 +16,10 @@ end
 desc "Daily reports"
 task :send_daily => :environment do
   puts "Sending daily..."
+  db = Sequel.connect(ENV['DATABASE_URL'])
   report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'])
   weekly_reports = report_client.weekly_user_reports
-  DailyNotifier.new(weekly_reports).call
+  DailyNotifier.new(weekly_reports, db).call
   puts "done."
 end
 

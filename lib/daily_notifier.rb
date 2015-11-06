@@ -9,8 +9,9 @@ class DailyNotifier
 
   attr_reader :weekly_reports
 
-  def initialize(weekly_reports)
+  def initialize(weekly_reports, db)
     @weekly_reports = weekly_reports
+    @db = db
   end
 
   def self.call(weekly_reports)
@@ -51,16 +52,18 @@ class DailyNotifier
   end
 
   def store_notification(email)
-    store = PStore.new(STORE)
-    store.transaction do
-      store[email] = Date.today.to_s
+    sent_daily = @db[:sent_daily]
+    sent = sent_daily.where(email: email).first
+    if sent
+      sent.update(sent_at: Date.today)
+    else
+      sent.insert(emai: email, sent_at: Date.today)
     end
   end
 
   def last_sent(email)
-    store = PStore.new(STORE)
-    store.transaction do
-      Date.parse store.fetch(email, Date.new.to_s)
-    end
+    sent_daily = @db[:sent_daily]
+    sent = sent_daily.where(email: email).first
+    sent.nil? ? Date.new : sent[:sent_at]
   end
 end

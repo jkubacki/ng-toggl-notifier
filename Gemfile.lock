@@ -10,6 +10,7 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.6.2)
     multi_xml (0.5.5)
+    pg (0.18.3)
     pony (1.11)
       mail (>= 2.0)
     rake (10.4.2)
@@ -26,6 +27,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    sequel (4.28.0)
     timecop (0.7.1)
 
 PLATFORMS
@@ -33,9 +35,11 @@ PLATFORMS
 
 DEPENDENCIES
   httparty
+  pg
   pony
   rake
   rspec
+  sequel
   timecop
 
 BUNDLED WITH
