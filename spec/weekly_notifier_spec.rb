@@ -13,7 +13,7 @@ describe WeeklyNotifier do
     end
 
     let(:weekly_user_report) do
-      WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', working_time)
+      WeeklyUserReport.new('1', 'John Doe', 'john@doe.com', false, working_time)
     end
     let(:weekly_reports) { [weekly_user_report] }
     let(:weekly_notifier) { described_class.new(weekly_reports) }
