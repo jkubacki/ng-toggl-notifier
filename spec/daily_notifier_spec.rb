@@ -37,7 +37,6 @@ describe DailyNotifier do
 
     context 'work at the weekend' do
       let(:working_time) { [nil, nil, nil, nil, nil, 3_600_000, nil, 3_600_000] }
-
       context 'employee' do
         it 'sends weekend notification' do
           allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
@@ -52,6 +51,17 @@ describe DailyNotifier do
         end
 
         it 'sends weekend notification' do
+          allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
+          expect(daily_notifier).not_to receive(:weekend_day_notification)
+          daily_notifier.call
+        end
+      end
+    end
+
+    context 'employee did not work at the weekend' do
+      let(:working_time) { [nil, nil, nil, nil, nil, 0, nil, 0] }
+      context 'employee' do
+        it 'does not send weekend notification' do
           allow(Date).to receive(:today) { Date.new(2015, 10, 31) }
           expect(daily_notifier).not_to receive(:weekend_day_notification)
           daily_notifier.call
