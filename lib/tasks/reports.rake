@@ -4,7 +4,7 @@ require 'weekly_notifier'
 
 desc "Weekly reports"
 task :send_weekly => :environment do
-  if Date.today.monday?
+  if Date.today.monday? || ENV['APP_ENV'] == 'test'
     puts "Sending weekly..."
     report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'])
     weekly_reports = report_client.weekly_user_reports
