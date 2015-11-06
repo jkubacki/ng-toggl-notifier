@@ -5,20 +5,22 @@ Daily reports are sent to users when they worked longer than 8 hours/day. Weekly
 
 ### Usage
 
-Sending daily reports:
+Running migrations:
+```
+bin/rake db:migrate
+```
 
+Sending daily reports:
 ```
 bin/rake send_daily
 ```
 
 Sending to office weekly reports:
-
 ```
 bin/rake send_weekly
 ```
 
 ### Environment vairables
-
 ```
 APP_ENV - application environment
 COMPANY_NAME - company name (Toggl workspace name)
@@ -32,7 +34,6 @@ SENDGRID_PASSWORD - SendGrid user password
 ```
 
 ### Testing
-
 ```
 bin/rake
 ```
