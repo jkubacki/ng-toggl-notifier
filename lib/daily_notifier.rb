@@ -53,11 +53,11 @@ class DailyNotifier
 
   def store_notification(email)
     sent_daily = @db[:sent_daily]
-    sent = sent_daily.where(email: email).first
-    if sent
+    sent = sent_daily.where(email: email)
+    if sent.first
       sent.update(sent_at: Date.today)
     else
-      sent.insert(emai: email, sent_at: Date.today)
+      sent_daily.insert(emai: email, sent_at: Date.today)
     end
   end
 
