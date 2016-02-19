@@ -19,7 +19,7 @@ describe TogglReportsClient do
           {
             :base_uri=>"https://toggl.com/reports/api/v2",
             :query=> {
-              "user_agent"=>"jacek.adamek@netguru.co",
+              "user_agent"=>"support@netguru.co",
               :workspace_id=>1,
               :grouping=>"users",
               :since=>"2015-10-26",
@@ -40,7 +40,7 @@ describe TogglReportsClient do
           {
             :base_uri=>"https://toggl.com/reports/api/v2",
             :query=> {
-              "user_agent"=>"jacek.adamek@netguru.co",
+              "user_agent"=>"support@netguru.co",
               :workspace_id=>1,
               :grouping=>"users",
               :since=>"2015-10-19",

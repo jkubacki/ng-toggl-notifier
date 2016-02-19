@@ -57,7 +57,7 @@ class TogglReportsClient
   def http_options(query: {}, data_api: false)
     {
       base_uri: data_api ? DATA_API_URI : REPORTS_API_URI,
-      query: { 'user_agent' => 'jacek.adamek@netguru.co' }.merge(query),
+      query: { 'user_agent' => 'support@netguru.co' }.merge(query),
       basic_auth: { username: @token, password: 'api_token' },
       debug_output: $stdout
     }
