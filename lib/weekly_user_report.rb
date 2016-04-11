@@ -26,11 +26,18 @@ class WeeklyUserReport
   end
 
   def day_hours(week_day)
-    data_slot = (week_day - 1) % 7
-    miliseconds_to_hours(@total_miliseconds[data_slot])
+    miliseconds_to_hours(@total_miliseconds[data_slot_index(week_day)])
+  end
+
+  def day_miliseconds(week_day)
+    @total_miliseconds[data_slot_index(week_day)]
   end
 
   private
+
+  def data_slot_index(week_day)
+    (week_day - 1) % 7
+  end
 
   def miliseconds_to_hours(miliseconds)
     return 0.0 if miliseconds.nil?

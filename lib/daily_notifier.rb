@@ -2,11 +2,12 @@ require 'pstore'
 require 'mailer'
 
 class DailyNotifier
-  BUSINESS_DAY_THRESHOLD = 8
+  MILISECONDS_PER_HOUR = 3_600_000
+  private_constant :MILISECONDS_PER_HOUR
+  DAILY_LIMIT_IN_MS = MILISECONDS_PER_HOUR * 8
+  private_constant :DAILY_LIMIT_IN_MS
 
   STORE = File.join(File.expand_path('..', __dir__), 'store', 'daily.pstore')
-
-  attr_reader :weekly_reports
 
   def initialize(weekly_reports, db)
     @weekly_reports = weekly_reports
@@ -32,6 +33,8 @@ class DailyNotifier
 
   private
 
+  attr_reader :weekly_reports
+
   def weekend_day_notification(report)
     Mailer.weekend_day_to_user(report.email, report: report)
     store_notification(report.email)
@@ -47,7 +50,7 @@ class DailyNotifier
   end
 
   def send_business_day_notification?(week_day, report)
-    report.day_hours(week_day) >= BUSINESS_DAY_THRESHOLD && last_sent(report.email) < Date.today
+    report.day_miliseconds(week_day) > DAILY_LIMIT_IN_MS && last_sent(report.email) < Date.today
   end
 
   def store_notification(email)
