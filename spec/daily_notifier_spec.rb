@@ -85,7 +85,7 @@ describe DailyNotifier do
         context 'and for contractor' do
           let(:employee_flag) { false }
 
-          it 'sends weekend notification' do
+          it 'does not send weekend notification' do
             expect(Mailer)
               .not_to receive(:weekend_day_to_user)
             daily_notifier.call
