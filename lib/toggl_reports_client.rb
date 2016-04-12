@@ -6,7 +6,7 @@ class TogglReportsClient
 
   def initialize(token, company_name, debug = false)
     @token = token
-    @debug = debug
+    @debug = debug ? $stdout : nil
     @company_name = company_name
   end
 

@@ -2,7 +2,7 @@ require 'toggl_reports_client'
 
 describe TogglReportsClient do
   describe '#weekly_user_reports' do
-    let(:client) { described_class.new('toggl_token', 'company_name') }
+    let(:client) { described_class.new('toggl_token', 'company_name', true) }
 
     before do
       allow(client).to receive(:workspace).and_return({ 'id' => 1 })
