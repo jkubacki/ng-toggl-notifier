@@ -4,8 +4,9 @@ class TogglReportsClient
   DATA_API_URI = 'https://toggl.com/api/v8'
   REPORTS_API_URI = 'https://toggl.com/reports/api/v2'
 
-  def initialize(token, company_name)
+  def initialize(token, company_name, debug = false)
     @token = token
+    @debug = debug ? $stdout : nil
     @company_name = company_name
   end
 
@@ -59,7 +60,7 @@ class TogglReportsClient
       base_uri: data_api ? DATA_API_URI : REPORTS_API_URI,
       query: { 'user_agent' => 'support@netguru.co' }.merge(query),
       basic_auth: { username: @token, password: 'api_token' },
-      debug_output: $stdout
+      debug_output: @debug,
     }
   end
 end
