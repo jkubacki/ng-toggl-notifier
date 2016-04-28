@@ -1,6 +1,7 @@
 require 'toggl_reports_client'
 require 'daily_notifier'
 require 'weekly_notifier'
+require 'monthly_notifier'
 
 desc "Weekly reports"
 task :send_weekly => :environment do
@@ -25,3 +26,14 @@ task :send_daily => :environment do
   puts "done."
 end
 
+desc "Monthly reports"
+task :send_monthly, [:year, :month] => :environment do |_, args|
+  year = args.year || Date.today.year
+  month = args.month || Date.today.month
+  puts "Sending monthly..."
+  debugging_on= ENV['DEBUG'] == "true"
+  report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
+  monthly_reports = report_client.monthly_user_reports(year.to_i, month.to_i)
+  MonthlyNotifier.new.call(monthly_reports)
+  puts "done."
+end
