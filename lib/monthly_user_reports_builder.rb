@@ -33,6 +33,6 @@ class MonthlyUserReportsBuilder
   end
 
   def too_long_dinner?(entry)
-    entry['pid'] == ENV['DINNER_PID'].to_i && entry['dur'] > DINNER_MAX_ENTRY_TIME_IN_MILISECONDS
+    entry['project'].to_s.downcase == 'dinner' && entry['dur'] > DINNER_MAX_ENTRY_TIME_IN_MILISECONDS
   end
 end
