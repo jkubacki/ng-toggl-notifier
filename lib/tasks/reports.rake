@@ -39,7 +39,7 @@ task :send_monthly, [:year, :month] => :environment do |_, args|
   debugging_on= ENV['DEBUG'] == "true"
   report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
   monthly_reports = report_client.monthly_user_reports(year, month)
-  MonthlyNotifier.new.call(monthly_reports)
+  MonthlyNotifier.new(monthly_reports, db).call
   db[:executed_monthly].insert(year: year, month: month)
   puts "done."
 end

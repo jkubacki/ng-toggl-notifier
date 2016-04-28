@@ -2,7 +2,7 @@ Sequel.migration do
   up do
     create_table(:sent_monthly) do
       primary_key :id
-      String :email, null: false, unique: true
+      String :email, null: false
       Date :sent_at, null: false
     end
   end
