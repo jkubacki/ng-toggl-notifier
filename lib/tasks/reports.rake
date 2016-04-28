@@ -27,8 +27,9 @@ task :send_daily => :environment do
 end
 
 desc "Monthly reports"
-  year = args.year || Date.today.year
-  month = args.month || Date.today.month
+task :send_monthly, [:year, :month, :force] => :environment do |_, args|
+  year = (args.year || Date.today.year).to_i
+  month = (args.month || Date.today.month).to_i
   db = Sequel.connect(ENV['DATABASE_URL'])
   if !args.force && db[:executed_monthly].where(year: year, month: month).count > 0
     fail 'Monthly report already sent'
