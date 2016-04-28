@@ -30,6 +30,7 @@ SEND_WEEKLY_EVERY_DAY - used for testing
 DATABASE_URL - database connection data
 SENDGRID_USERNAME - SendGrid user name
 SENDGRID_PASSWORD - SendGrid user password
+DINNER_PID - Project id of dinner
 
 ```
 
