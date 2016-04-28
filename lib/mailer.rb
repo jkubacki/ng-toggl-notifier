@@ -27,6 +27,14 @@ class Mailer
     )
   end
 
+  def self.monthly_to_user(email, data = {})
+    Pony.mail(
+      to: email,
+      subject: 'Toggl monthly report',
+      body: render(data)
+    )
+  end
+
   def self.render(data = {})
     template_name = caller[0][/`.*'/][1..-2]
     template_path = File.join(TEMPLATES_DIR, "#{template_name}.txt")
