@@ -1,4 +1,5 @@
 require 'weekly_user_report'
+require 'monthly_user_reports_builder'
 
 class TogglReportsClient
   DATA_API_URI = 'https://toggl.com/api/v8'
