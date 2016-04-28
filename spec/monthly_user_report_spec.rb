@@ -2,9 +2,7 @@ require 'monthly_user_report'
 
 describe MonthlyUserReport do
   let(:entry) { {'start' => '2016-01-01T17:30:10+02:00', 'end' => '2016-01-01T19:30:10+02:00', 'dur' => 3666600} }
-  let(:report) { described_class.new(1, 'user_name', 'email@example.com', 'employee') }
-
-  before { report.invalid_dinner_entries << entry }
+  let(:report) { described_class.new(1, 'user_name', 'email@example.com', 'employee', [entry]) }
 
   subject { report.formatted_entries(:dinner) }
 
