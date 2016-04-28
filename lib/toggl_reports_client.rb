@@ -24,6 +24,19 @@ class TogglReportsClient
       .map { |ur| WeeklyUserReport.build_from_api(ur, users_data) }
   end
 
+  def monthly_user_reports(year, month)
+    return @monthly_users_report if defined?(@monthly_users_report)
+    beggining_of_the_month = Date.new(year, month, 1)
+    end_of_the_month = Date.new(year, month, -1)
+    query = {
+      workspace_id: workspace['id'],
+      since: beggining_of_the_month.strftime('%Y-%m-%d'),
+      until: end_of_the_month.strftime('%Y-%m-%d')
+    }
+    entries_data = HTTParty.get('/details', http_options(query: query))['data']
+    @monthly_users_report = MonthlyUserReportsBuilder.new.build(entries_data, users_data)
+  end
+
   private
 
   def workspace
