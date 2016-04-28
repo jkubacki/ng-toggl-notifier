@@ -28,6 +28,7 @@ end
 
 desc "Monthly reports"
 task :send_monthly, [:year, :month] => :environment do |_, args|
+  fail 'Set DINNER_PID env' if ENV['DINNER_PID'].nil?
   year = args.year || Date.today.year
   month = args.month || Date.today.month
   puts "Sending monthly..."
