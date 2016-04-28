@@ -31,10 +31,15 @@ task :send_monthly, [:year, :month] => :environment do |_, args|
   fail 'Set DINNER_PID env' if ENV['DINNER_PID'].nil?
   year = args.year || Date.today.year
   month = args.month || Date.today.month
+  db = Sequel.connect(ENV['DATABASE_URL'])
+  if db[:executed_monthly].where(year: year, month: month).count > 0
+    fail 'Monthly report already sent'
+  end
   puts "Sending monthly..."
   debugging_on= ENV['DEBUG'] == "true"
   report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
-  monthly_reports = report_client.monthly_user_reports(year.to_i, month.to_i)
+  monthly_reports = report_client.monthly_user_reports(year, month)
   MonthlyNotifier.new.call(monthly_reports)
+  db[:executed_monthly].insert(year: year, month: month)
   puts "done."
 end
