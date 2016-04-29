@@ -4,34 +4,27 @@ class Mailer
   TEMPLATES_DIR = File.join(File.expand_path('..', __dir__), 'templates')
 
   def self.weekly_to_office(data = {})
-    Pony.mail(
-      to: ENV['OFFICE_EMAIL'],
-      subject: 'Toggl weekly report',
-      body: render(data)
-    )
+    mail(ENV['OFFICE_EMAIL'], 'Toggl weekly report', render(data))
   end
 
   def self.daily_to_user(email, data = {})
-    Pony.mail(
-      to: email,
-      subject: 'Toggl daily report',
-      body: render(data)
-    )
+    mail(email, 'Toggl daily report', render(data))
   end
 
   def self.weekend_day_to_user(email, data = {})
-    Pony.mail(
-      to: email,
-      subject: 'Toggl weekend report',
-      body: render(data)
-    )
+    mail(email, 'Toggl weekend report', render(data))
   end
 
   def self.monthly_to_user(email, data = {})
+    mail(email, 'Toggl monthly report', render(data))
+  end
+
+  def self.mail(email, subject, data)
+    email_to = ENV['TEST_EMAIL'] || email
     Pony.mail(
-      to: email,
-      subject: 'Toggl monthly report',
-      body: render(data)
+      to: email_to,
+      subject: subject,
+      body: data
     )
   end
 
