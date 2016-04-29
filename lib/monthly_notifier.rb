@@ -8,8 +8,10 @@ class MonthlyNotifier
   end
 
   def call
-    @monthly_reports.each do |report|
-      send_monthly_notification(report) if report.employee
+    emails_count = @monthly_reports.count
+    @monthly_reports.each_with_index do |report, index|
+      send_monthly_notification(report) if report.employee || true
+      puts "Sent email #{index + 1}/#{emails_count}"
     end
   end
 
