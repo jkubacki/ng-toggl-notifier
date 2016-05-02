@@ -6,6 +6,7 @@ gem "pony"
 gem "rake"
 gem "sequel"
 gem "pg"
+gem "pry"
 
 group :development, :test do
   gem "rspec"
