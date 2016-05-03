@@ -30,7 +30,7 @@ class WeeklyUserReport
   end
 
   def day_miliseconds(week_day)
-    @total_miliseconds[data_slot_index(week_day)]
+    @total_miliseconds[data_slot_index(week_day)] || 0
   end
 
   private

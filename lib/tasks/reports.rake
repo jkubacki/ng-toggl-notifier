@@ -20,6 +20,7 @@ task :send_daily => :environment do
   puts "Sending daily..."
   db = Sequel.connect(ENV['DATABASE_URL'])
   debugging_on= ENV['DEBUG'] == "true"
+  debugging_on = ENV['DEBUG'] == "true"
   report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
   weekly_reports = report_client.weekly_user_reports
   DailyNotifier.new(weekly_reports, db).call
