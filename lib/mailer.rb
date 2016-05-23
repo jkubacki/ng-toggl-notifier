@@ -19,6 +19,14 @@ class Mailer
     mail(email, 'Toggl monthly report', render(data))
   end
 
+  def self.empty_project(email, data = {})
+    mail(email, 'You have empty project entry in Toggl', render(data))
+  end
+
+  def self.long_dinner(email, data = {})
+    mail(email, 'You have long dinner entry in Toggl', render(data))
+  end
+
   def self.mail(email, subject, data)
     email_to = ENV['TEST_EMAIL'] || email
     Pony.mail(
