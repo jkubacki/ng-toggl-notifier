@@ -3,8 +3,8 @@ require 'daily_lunch_notifier'
 describe DailyLunchNotifier do
   describe '#call' do
     let(:employee_flag) { true }
-    let(:monthly_user_report) do
-      MonthlyUserReport.new(
+    let(:invalidity_report) do
+      UserInvalidityReport.new(
         '1',
         'John Doe',
         'john@doe.com',
@@ -13,8 +13,8 @@ describe DailyLunchNotifier do
         [],
       )
     end
-    let(:monthly_user_reports) { [monthly_user_report] }
-    let(:daily_lunch_notifier) { described_class.new(monthly_user_reports) }
+    let(:invalidity_reports) { [invalidity_report] }
+    let(:daily_lunch_notifier) { described_class.new(invalidity_reports) }
 
     context 'user has invalid dinner entries' do
       let(:invalid_dinner_entries) { [double("entry")] }
@@ -22,7 +22,7 @@ describe DailyLunchNotifier do
       it 'sends notification' do
         expect(Mailer)
           .to receive(:long_dinner)
-          .with(monthly_user_report.email, report: monthly_user_report)
+          .with(invalidity_report.email, report: invalidity_report)
         daily_lunch_notifier.call
       end
     end

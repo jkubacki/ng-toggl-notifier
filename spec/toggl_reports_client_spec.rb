@@ -13,28 +13,6 @@ describe TogglReportsClient do
       Timecop.return
     end
 
-    describe '#monthly_user_reports' do
-      it 'passes proper parameters to http get query' do
-        allow(client).to receive(:users_data)
-        expect(HTTParty).to receive(:get).with('/details',
-          {
-            :base_uri=>"https://toggl.com/reports/api/v2",
-            :query=> {
-              "user_agent" =>"support@netguru.co",
-              :workspace_id => 1,
-              :page => 1,
-              :since => "2015-10-01",
-              :until => "2015-10-31"},
-              :basic_auth => {:username=>"toggl_token", :password=>"api_token"
-            },
-            :debug_output => $stdout
-          })
-        .and_return({ 'data' => [] })
-
-        client.monthly_user_reports(2015, 10)
-      end
-    end
-
     context 'current_week' do
       it 'passes proper paramters to http get query' do
         expect(HTTParty).to receive(:get).with('/weekly',

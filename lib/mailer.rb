@@ -15,10 +15,6 @@ class Mailer
     mail(email, 'Toggl weekend report', render(data))
   end
 
-  def self.monthly_to_user(email, data = {})
-    mail(email, 'Toggl monthly report', render(data))
-  end
-
   def self.empty_project(email, data = {})
     mail(email, 'You have empty project entry in Toggl', render(data))
   end
