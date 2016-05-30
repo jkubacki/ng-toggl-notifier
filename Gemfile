@@ -12,6 +12,7 @@ group :development, :test do
   gem "rspec"
   gem "timecop"
   gem "dotenv"
+  gem "letter_opener"
 end
 
 ruby "2.2.3"

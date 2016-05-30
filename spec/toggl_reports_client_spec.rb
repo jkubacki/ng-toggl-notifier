@@ -22,6 +22,7 @@ describe TogglReportsClient do
             :query=> {
               "user_agent" =>"support@netguru.co",
               :workspace_id => 1,
+              :page => 1,
               :since => "2015-10-01",
               :until => "2015-10-31"},
               :basic_auth => {:username=>"toggl_token", :password=>"api_token"

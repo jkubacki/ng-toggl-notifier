@@ -1,5 +1,7 @@
 require 'toggl_reports_client'
 require 'daily_notifier'
+require 'daily_lunch_notifier'
+require 'daily_invalid_project_notifier'
 require 'weekly_notifier'
 require 'monthly_notifier'
 
@@ -19,11 +21,30 @@ desc "Daily reports"
 task :send_daily => :environment do
   puts "Sending daily..."
   db = Sequel.connect(ENV['DATABASE_URL'])
-  debugging_on= ENV['DEBUG'] == "true"
   debugging_on = ENV['DEBUG'] == "true"
   report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
   weekly_reports = report_client.weekly_user_reports
   DailyNotifier.new(weekly_reports, db).call
+  puts "done."
+end
+
+desc "Daily lunch reports"
+task :send_daily_lunch_check => :environment do
+  puts "Sending daily lunch entries check.."
+  debugging_on = ENV['DEBUG'] == "true"
+  report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
+  daily_reports = report_client.detailed_daily_user_reports(Date.today.prev_day)
+  DailyLunchNotifier.new(daily_reports).call
+  puts "done."
+end
+
+desc "Daily invalid project reports"
+task :send_daily_invalid_project_check => :environment do
+  puts "Sending daily lunch entries check.."
+  debugging_on = ENV['DEBUG'] == "true"
+  report_client = TogglReportsClient.new(ENV['TOGGL_TOKEN'], ENV['COMPANY_NAME'], debugging_on)
+  daily_reports = report_client.detailed_daily_user_reports(Date.today.prev_day)
+  DailyInvalidProjectNotifier.new(daily_reports).call
   puts "done."
 end
 

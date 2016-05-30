@@ -1,0 +1,5 @@
+Hej,
+
+w dniu wczorajszym masz wpis w Togglu, ale nie jest on przypisany do żadnego z projektów.
+Proszę popraw ASAP. Tutaj więcej info:
+https://netguru.atlassian.net/wiki/pages/viewpage.action?pageId=3375489

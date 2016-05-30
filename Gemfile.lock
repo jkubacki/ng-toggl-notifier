@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.4.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
     dotenv (2.0.2)
@@ -8,6 +9,10 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     json (1.8.3)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    letter_opener (1.4.1)
+      launchy (~> 2.2)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)
@@ -44,6 +49,7 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   httparty
+  letter_opener
   pg
   pony
   pry
@@ -53,4 +59,4 @@ DEPENDENCIES
   timecop
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

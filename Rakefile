@@ -5,6 +5,7 @@ Bundler.require(:default, ENV['APP_ENV'])
 $LOAD_PATH << File.join(__dir__, 'lib')
 
 if %w(test development).include? ENV['APP_ENV']
+  require 'letter_opener'
   require 'dotenv'
   Dotenv.load
 end
@@ -25,4 +26,9 @@ task :environment do
       :enable_starttls_auto => true
     }
   }
+
+  if ENV['APP_ENV'] == 'development'
+    Pony.options[:via] = LetterOpener::DeliveryMethod
+    Pony.options[:via_options][:location] = File.expand_path('../tmp/letter_opener', __FILE__)
+  end
 end
