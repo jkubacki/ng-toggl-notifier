@@ -29,16 +29,45 @@ class TogglReportsClient
     return @monthly_users_report if defined?(@monthly_users_report)
     beggining_of_the_month = Date.new(year, month, 1)
     end_of_the_month = Date.new(year, month, -1)
-    query = {
-      workspace_id: workspace['id'],
-      since: beggining_of_the_month.strftime('%Y-%m-%d'),
-      until: end_of_the_month.strftime('%Y-%m-%d')
-    }
-    entries_data = HTTParty.get('/details', http_options(query: query))['data']
+    entries_data = daily_details(
+        from: beggining_of_the_month,
+        to: end_of_the_month,
+      )['data']
     @monthly_users_report = MonthlyUserReportsBuilder.new.build(entries_data, users_data)
   end
 
+  def detailed_daily_user_reports(date = Date.today)
+    return @detailed_daily_user_reports if defined?(@detailed_daily_user_reports)
+    first_response = daily_details(from: date, page: 1)
+    time_entries = first_response['data']
+    total_pages = calculate_pages(first_response)
+    total_pages.times do |page|
+      next if page == 0
+      time_entries += daily_details(page: page + 1, from: date)['data']
+    end
+    @detailed_daily_user_reports = MonthlyUserReportsBuilder.new.build(time_entries, users_data)
+  end
+
   private
+
+  def calculate_pages(response)
+    total = response['total_count']
+    per_page = response['per_page']
+    return 1 if total.nil? || per_page.nil?
+    (total.to_f / per_page.to_f).ceil
+  end
+
+  def daily_details(from:, to: nil, page: 1)
+    raise ArgumentError unless from.is_a? Date
+    to = from if to.nil?
+    query = {
+      workspace_id: workspace['id'],
+      page: page,
+      since: from.strftime('%Y-%m-%d'),
+      until: to.strftime('%Y-%m-%d')
+    }
+    HTTParty.get('/details', http_options(query: query))
+  end
 
   def workspace
     @workspace ||= HTTParty.get('/workspaces', http_options(data_api: true))
