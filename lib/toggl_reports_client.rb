@@ -1,5 +1,5 @@
 require 'weekly_user_report'
-require 'monthly_user_reports_builder'
+require 'user_invalidity_reports_builder'
 
 class TogglReportsClient
   DATA_API_URI = 'https://toggl.com/api/v8'
@@ -25,30 +25,24 @@ class TogglReportsClient
       .map { |ur| WeeklyUserReport.build_from_api(ur, users_data) }
   end
 
-  def monthly_user_reports(year, month)
-    return @monthly_users_report if defined?(@monthly_users_report)
-    beggining_of_the_month = Date.new(year, month, 1)
-    end_of_the_month = Date.new(year, month, -1)
-    entries_data = daily_details(
-        from: beggining_of_the_month,
-        to: end_of_the_month,
-      )['data']
-    @monthly_users_report = MonthlyUserReportsBuilder.new.build(entries_data, users_data)
-  end
-
   def detailed_daily_user_reports(date = Date.today)
     return @detailed_daily_user_reports if defined?(@detailed_daily_user_reports)
-    first_response = daily_details(from: date, page: 1)
+    time_entries = fetch_entries(from: date)
+    @detailed_daily_user_reports = UserInvalidityReportsBuilder.new.build(time_entries, users_data)
+  end
+
+  private
+
+  def fetch_entries(from:, to: nil)
+    first_response = daily_details(from: from, to: to, page: 1)
     time_entries = first_response['data']
     total_pages = calculate_pages(first_response)
     total_pages.times do |page|
       next if page == 0
-      time_entries += daily_details(page: page + 1, from: date)['data']
+      time_entries += daily_details(from: from, to: to, page: page + 1)['data']
     end
-    @detailed_daily_user_reports = MonthlyUserReportsBuilder.new.build(time_entries, users_data)
+    time_entries
   end
-
-  private
 
   def calculate_pages(response)
     total = response['total_count']

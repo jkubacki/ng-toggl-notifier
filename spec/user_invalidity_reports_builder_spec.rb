@@ -1,6 +1,6 @@
-require 'monthly_user_reports_builder'
+require 'user_invalidity_reports_builder'
 
-describe MonthlyUserReportsBuilder do
+describe UserInvalidityReportsBuilder do
   let(:user_emails) do
     {
       1 => { email: "user@example.com", employee: true },
@@ -14,7 +14,7 @@ describe MonthlyUserReportsBuilder do
   let(:project_invalid) { {"pid" => nil, "uid" => 1, "project" => nil, "dur" => 1, "user" => 'user'} }
   let(:project_invalid_user2) { {"pid" => nil, "uid" => 2, "project" => nil, "dur" => 1, "user" => 'user'} }
 
-  subject { MonthlyUserReportsBuilder.new.build(entries, user_emails) }
+  subject { described_class.new.build(entries, user_emails) }
 
   let(:entries) { [dinner_valid, dinner_invalid, project_valid, project_invalid, project_invalid_user2] }
 

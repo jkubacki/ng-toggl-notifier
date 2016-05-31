@@ -1,6 +1,6 @@
-require 'monthly_user_report'
+require 'user_invalidity_report'
 
-class MonthlyUserReportsBuilder
+class UserInvalidityReportsBuilder
   DINNER_MAX_ENTRY_TIME_IN_MILISECONDS = 1_800_000 # 30 min
   private_constant :DINNER_MAX_ENTRY_TIME_IN_MILISECONDS
 
@@ -10,7 +10,7 @@ class MonthlyUserReportsBuilder
       uid = entry['uid']
       report = reports.find { |report| report.uid == uid }
       new_report = report.nil?
-      report ||= MonthlyUserReport.new(
+      report ||= UserInvalidityReport.new(
         uid,
         entry['user'],
         users_emails[uid][:email],
