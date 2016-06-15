@@ -32,6 +32,12 @@ bin/rake send_monthly[2016,4] - for specific year and month
 bin/rake send_monthly[2016,4,true] - force resending for specific year and month
 ```
 
+Developer console:
+
+```
+bin/rake console
+```
+
 ### Environment vairables
 ```
 APP_ENV - application environment
