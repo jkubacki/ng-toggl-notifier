@@ -8,9 +8,9 @@ describe Mailer do
     Pony.override_options = { via: :test, charset: 'utf8' }
   end
 
-  describe '.daily_to_user' do
+  describe '.daily_overtime_to_user' do
 
-    let(:action) { mailer.daily_to_user('john@example.com', overtime_milliseconds: 2.5*3600*1000 + 5001) }
+    let(:action) { mailer.daily_overtime_to_user('john@example.com', overtime_milliseconds: 2.5*3600*1000 + 5001) }
     let(:email) {
       action
       Mail::TestMailer.deliveries.last

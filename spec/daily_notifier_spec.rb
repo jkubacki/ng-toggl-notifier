@@ -32,7 +32,7 @@ describe DailyNotifier do
 
         it 'sends business day notification' do
           expect(Mailer)
-            .to receive(:daily_to_user)
+            .to receive(:daily_overtime_to_user)
             .with(weekly_user_report.email, week_day: 3, overtime_milliseconds: 1)
           daily_notifier.call
         end
@@ -45,7 +45,7 @@ describe DailyNotifier do
 
         it 'does not send business day notification' do
           expect(Mailer)
-            .not_to receive(:daily_to_user)
+            .not_to receive(:daily_overtime_to_user)
           daily_notifier.call
         end
       end
@@ -57,7 +57,7 @@ describe DailyNotifier do
 
         it 'does not send bussiness day notification' do
           expect(Mailer)
-            .not_to receive(:daily_to_user)
+            .not_to receive(:daily_overtime_to_user)
           daily_notifier.call
         end
       end

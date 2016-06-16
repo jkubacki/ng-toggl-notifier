@@ -7,7 +7,7 @@ class Mailer
     mail(ENV['OFFICE_EMAIL'], 'Toggl weekly report', render(data))
   end
 
-  def self.daily_to_user(email, data = {})
+  def self.daily_overtime_to_user(email, data = {})
     overtime_milliseconds = data.fetch(:overtime_milliseconds)
     overtime_seconds, overtime_milliseconds = overtime_milliseconds.divmod(1000)
     overtime_minutes, overtime_seconds = overtime_seconds.divmod(60)

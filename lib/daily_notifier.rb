@@ -36,7 +36,7 @@ class DailyNotifier
   end
 
   def overtime_notification(week_day, report)
-    Mailer.daily_to_user(report.email, week_day: week_day, overtime_milliseconds: report.overtime_milliseconds_at(week_day))
+    Mailer.daily_overtime_to_user(report.email, week_day: week_day, overtime_milliseconds: report.overtime_milliseconds_at(week_day))
     store_notification(report.email)
   end
 
