@@ -8,7 +8,14 @@ class Mailer
   end
 
   def self.daily_to_user(email, data = {})
-    mail(email, 'Toggl daily report', render(data))
+    overtime_milliseconds = data.fetch(:overtime_milliseconds)
+    overtime_seconds, overtime_milliseconds = overtime_milliseconds.divmod(1000)
+    overtime_minutes, overtime_seconds = overtime_seconds.divmod(60)
+    overtime_hours, overtime_minutes = overtime_minutes.divmod(60)
+    mail(email, 'Toggl overtime report', render(data.merge(
+      overtime_minutes: overtime_minutes,
+      overtime_hours: overtime_hours
+    )))
   end
 
   def self.weekend_day_to_user(email, data = {})

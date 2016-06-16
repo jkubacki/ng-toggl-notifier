@@ -2,11 +2,6 @@ require 'pstore'
 require 'mailer'
 
 class DailyNotifier
-  MILISECONDS_PER_HOUR = 3_600_000
-  private_constant :MILISECONDS_PER_HOUR
-  DAILY_LIMIT_IN_MS = MILISECONDS_PER_HOUR * 8
-  private_constant :DAILY_LIMIT_IN_MS
-
   STORE = File.join(File.expand_path('..', __dir__), 'store', 'daily.pstore')
 
   def initialize(weekly_reports, db)
@@ -22,11 +17,10 @@ class DailyNotifier
     today = Date.today
     week_day = today.wday
     weekly_reports.each do |report|
-      case week_day
-      when 0, 6
+      if today.saturday? || today.sunday?
         weekend_day_notification(report) if send_weekend_day_notification?(week_day, report)
       else
-        business_day_notification(report) if send_business_day_notification?(week_day, report)
+        overtime_notification(week_day, report) if send_overtime_notification?(week_day, report)
       end
     end
   end
@@ -40,8 +34,8 @@ class DailyNotifier
     store_notification(report.email)
   end
 
-  def business_day_notification(report)
-    Mailer.daily_to_user(report.email, report: report)
+  def overtime_notification(week_day, report)
+    Mailer.daily_to_user(report.email, week_day: week_day, overtime_milliseconds: report.overtime_milliseconds_at(week_day))
     store_notification(report.email)
   end
 
@@ -49,8 +43,8 @@ class DailyNotifier
     report.employee && report.day_hours(week_day) > 0 && last_sent(report.email) < Date.today
   end
 
-  def send_business_day_notification?(week_day, report)
-    report.day_miliseconds(week_day) > DAILY_LIMIT_IN_MS && last_sent(report.email) < Date.today
+  def send_overtime_notification?(week_day, report)
+    report.overtime_at?(week_day) && last_sent(report.email) < Date.today
   end
 
   def store_notification(email)

@@ -1,7 +1,7 @@
 Hej,
 
-minęło Ci już 8 godzin pracy, dobra robota! czas do domu!
+W tym tygodniu masz już <%= overtime_hours %> godzin i <%= overtime_minutes %> minut nadgodzin! Zwolnij trochę jutro :)
 
-Hey you!
+Hey,
 
-You have already been working for eight hours today, well done! Time to go home!
+This week you have <%= overtime_hours %> hours and <%= overtime_minutes %> minutes overtime so far! Chill out tomorrow :)
