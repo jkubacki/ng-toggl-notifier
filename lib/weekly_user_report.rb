@@ -1,13 +1,15 @@
 class WeeklyUserReport
   attr_reader :uid, :user_name, :email, :employee
-  MILISECONDS_PER_HOUR = 3_600_000
 
-  def initialize(uid, user_name, email, employee, total_miliseconds)
+  MILLISECONDS_PER_HOUR = 3_600_000
+  DAILY_LIMIT_IN_MS = MILLISECONDS_PER_HOUR * 8
+
+  def initialize(uid, user_name, email, employee, total_milliseconds)
     @uid = uid
     @user_name = user_name
     @email = email
     @employee = employee
-    @total_miliseconds = total_miliseconds
+    @total_milliseconds = total_milliseconds
   end
 
   def self.build_from_api(report_data, users_emails)
@@ -22,26 +24,41 @@ class WeeklyUserReport
   end
 
   def total_hours
-    miliseconds_to_hours(@total_miliseconds[7])
+    milliseconds_to_hours(@total_milliseconds[7])
   end
 
   def day_hours(week_day)
-    miliseconds_to_hours(@total_miliseconds[data_slot_index(week_day)])
+    milliseconds_to_hours(@total_milliseconds[data_slot_index(week_day)])
   end
 
-  def day_miliseconds(week_day)
-    @total_miliseconds[data_slot_index(week_day)] || 0
+  def day_milliseconds(week_day)
+    @total_milliseconds[data_slot_index(week_day)] || 0
+  end
+
+  def overtime_at?(week_day)
+    overtime_milliseconds_at(week_day) > 0
+  end
+
+  def overtime_milliseconds_at(week_day)
+    total_milliseconds = day_milliseconds_upto(week_day)
+    maximum_milliseconds = week_day * DAILY_LIMIT_IN_MS
+    [total_milliseconds - maximum_milliseconds, 0].max
   end
 
   private
+
+  def day_milliseconds_upto(week_day)
+    days_milliseconds = 1.upto(week_day).map { |week_day| day_milliseconds(week_day) }
+    days_milliseconds.reduce(0, :+)
+  end
 
   def data_slot_index(week_day)
     (week_day - 1) % 7
   end
 
-  def miliseconds_to_hours(miliseconds)
-    return 0.0 if miliseconds.nil?
+  def milliseconds_to_hours(milliseconds)
+    return 0.0 if milliseconds.nil?
     # Truncating instead of rounding (we don't want to 7h:59m:59s == 8 h)
-    (miliseconds * 100 / MILISECONDS_PER_HOUR.to_f).floor / 100.0
+    (milliseconds * 100 / MILLISECONDS_PER_HOUR.to_f).floor / 100.0
   end
 end
