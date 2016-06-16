@@ -1,5 +1,6 @@
 require 'pstore'
 require 'mailer'
+require 'weekly_user_report'
 
 class DailyNotifier
   STORE = File.join(File.expand_path('..', __dir__), 'store', 'daily.pstore')

@@ -64,47 +64,65 @@ describe DailyNotifier do
     end
 
     context 'at the weekend' do
-      let(:weekend_day) { Date.new(2015, 10, 31) }
       before { Timecop.freeze(weekend_day) }
       after { Timecop.return }
 
-      let(:input_time_struct) do
-        [nil, nil, nil, nil, nil, worked_time_in_ms, nil, worked_time_in_ms]
+      shared_examples_for 'notifications' do
+
+        context 'worked one hour' do
+          let(:worked_time_in_ms) { miliseconds_per_hour }
+
+          context 'and for employee' do
+            it 'sends weekend notification' do
+              expect(Mailer)
+                .to receive(:weekend_day_to_user)
+                .with(weekly_user_report.email, report: weekly_user_report)
+              daily_notifier.call
+            end
+          end
+
+          context 'and for contractor' do
+            let(:employee_flag) { false }
+
+            it 'does not send weekend notification' do
+              expect(Mailer)
+                .not_to receive(:weekend_day_to_user)
+              daily_notifier.call
+            end
+          end
+        end
+
+        context 'did not work' do
+          let(:worked_time_in_ms) { 0 }
+
+          context 'and for employee' do
+            it 'does not send weekend notification' do
+              expect(Mailer)
+                .not_to receive(:weekend_day_to_user)
+              daily_notifier.call
+            end
+          end
+        end
       end
 
-      context 'worked one hour' do
-        let(:worked_time_in_ms) { miliseconds_per_hour }
+      context 'saturday' do
+        let(:weekend_day) { Date.new(2015, 10, 31) }
 
-        context 'and for employee' do
-          it 'sends weekend notification' do
-            expect(Mailer)
-              .to receive(:weekend_day_to_user)
-              .with(weekly_user_report.email, report: weekly_user_report)
-            daily_notifier.call
-          end
+        let(:input_time_struct) do
+          [nil, nil, nil, nil, nil, worked_time_in_ms, nil, worked_time_in_ms]
         end
 
-        context 'and for contractor' do
-          let(:employee_flag) { false }
-
-          it 'does not send weekend notification' do
-            expect(Mailer)
-              .not_to receive(:weekend_day_to_user)
-            daily_notifier.call
-          end
-        end
+        it_behaves_like 'notifications'
       end
 
-      context 'did not work' do
-        let(:worked_time_in_ms) { 0 }
+      context 'sunday' do
+        let(:weekend_day) { Date.new(2015, 11, 1) }
 
-        context 'and for employee' do
-          it 'does not send weekend notification' do
-            expect(Mailer)
-              .not_to receive(:weekend_day_to_user)
-            daily_notifier.call
-          end
+        let(:input_time_struct) do
+          [nil, nil, nil, nil, nil, nil, worked_time_in_ms, worked_time_in_ms]
         end
+
+        it_behaves_like 'notifications'
       end
     end
   end
