@@ -27,7 +27,7 @@ describe DailyNotifier do
 
       context 'user worked overtime up until today' do
         let(:input_time_struct) do
-          [working_day_in_ms, working_day_in_ms, working_day_in_ms+1, nil, nil, nil, nil, 3*working_day_in_ms+1]
+          [working_day_in_ms, working_day_in_ms, working_day_in_ms + 1, nil, nil, nil, nil, 3 * working_day_in_ms + 1]
         end
 
         it 'sends business day notification' do
@@ -40,7 +40,7 @@ describe DailyNotifier do
 
       context 'user worked exactly overtime limit' do
         let(:input_time_struct) do
-          [working_day_in_ms, working_day_in_ms, working_day_in_ms, nil, nil, nil, nil, 3*working_day_in_ms]
+          [working_day_in_ms, working_day_in_ms, working_day_in_ms, nil, nil, nil, nil, 3 * working_day_in_ms]
         end
 
         it 'does not send business day notification' do
@@ -52,7 +52,7 @@ describe DailyNotifier do
 
       context 'user worked less than overtime limit' do
         let(:input_time_struct) do
-          [working_day_in_ms, working_day_in_ms, working_day_in_ms-1, nil, nil, nil, nil, 3*working_day_in_ms-1]
+          [working_day_in_ms, working_day_in_ms, working_day_in_ms - 1, nil, nil, nil, nil, 3 * working_day_in_ms - 1]
         end
 
         it 'does not send bussiness day notification' do

@@ -36,14 +36,14 @@ describe WeeklyUserReport do
         'john@doe.com',
         false,
         [
-          working_day_ms-1, # monday: no overtime
-          working_day_ms+1, # tuesday: no overtime
-          working_day_ms+1, # wednesday: overtime!!
+          working_day_ms - 1, # monday: no overtime
+          working_day_ms + 1, # tuesday: no overtime
+          working_day_ms + 1, # wednesday: overtime!!
           working_day_ms,   # thursday: still overtime!!
-          working_day_ms-2, # friday: no overtime
+          working_day_ms - 2, # friday: no overtime
           0,
           nil,
-          5*working_day_ms-1
+          5 * working_day_ms - 1
         ]
       )
 
