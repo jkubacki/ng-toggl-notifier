@@ -1,0 +1,7 @@
+Hej,
+
+W tym tygodniu masz już <%= overtime_hours %> godzin i <%= overtime_minutes %> minut nadgodzin! Zwolnij trochę jutro :)
+
+Hey,
+
+This week you have <%= overtime_hours %> hours and <%= overtime_minutes %> minutes overtime so far! Chill out tomorrow :)

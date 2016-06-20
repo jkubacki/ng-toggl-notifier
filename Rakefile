@@ -32,3 +32,7 @@ task :environment do
     Pony.options[:via_options][:location] = File.expand_path('../tmp/letter_opener', __FILE__)
   end
 end
+
+task console: :environment do
+  binding.pry
+end
