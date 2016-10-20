@@ -2,7 +2,7 @@
 
 Application sends notifications about working hours basing on toggl reports.
 
-Daily reports are sent to users when they worked longer than 8 hours/day.
+Daily notifications are sent to users who exceed their total working time (8h/day) during the week.
 
 Weekly report is sent to office on monday and it contains list of these users who worked longer than 40 hours in the previous week.
 
