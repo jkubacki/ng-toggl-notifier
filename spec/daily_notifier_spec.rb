@@ -26,15 +26,29 @@ describe DailyNotifier do
       after { Timecop.return }
 
       context 'user worked overtime up until today' do
-        let(:input_time_struct) do
-          [working_day_in_ms, working_day_in_ms, working_day_in_ms + 1, nil, nil, nil, nil, 3 * working_day_in_ms + 1]
+        context 'under overtime notification limit' do
+          let(:input_time_struct) do
+            [working_day_in_ms, working_day_in_ms, working_day_in_ms + 599_999, nil, nil, nil, nil, 3 * working_day_in_ms + 599_999]
+          end
+
+          it 'does not send business day notification' do
+            expect(Mailer)
+              .not_to receive(:daily_overtime_to_user)
+            daily_notifier.call
+          end
         end
 
-        it 'sends business day notification' do
-          expect(Mailer)
-            .to receive(:daily_overtime_to_user)
-            .with(weekly_user_report.email, week_day: 3, overtime_milliseconds: 1)
-          daily_notifier.call
+        context 'over overtime notification limit' do
+          let(:input_time_struct) do
+            [working_day_in_ms, working_day_in_ms, working_day_in_ms + 600_000, nil, nil, nil, nil, 3 * working_day_in_ms + 600_000]
+          end
+
+          it 'sends business day notification' do
+            expect(Mailer)
+              .to receive(:daily_overtime_to_user)
+              .with(weekly_user_report.email, week_day: 3, overtime_milliseconds: 600_000)
+            daily_notifier.call
+          end
         end
       end
 

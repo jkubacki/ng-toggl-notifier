@@ -4,6 +4,7 @@ require 'weekly_user_report'
 
 class DailyNotifier
   STORE = File.join(File.expand_path('..', __dir__), 'store', 'daily.pstore')
+  OVERTIME_NOTIFICATION_LIMIT = 600_000 # 10 minutes
 
   def initialize(weekly_reports, db)
     @weekly_reports = weekly_reports
@@ -45,7 +46,13 @@ class DailyNotifier
   end
 
   def send_overtime_notification?(week_day, report)
-    report.overtime_at?(week_day) && last_sent(report.email) < Date.today
+    report.overtime_at?(week_day) &&
+      over_overtime_notification_limit?(week_day, report) &&
+      last_sent(report.email) < Date.today
+  end
+
+  def over_overtime_notification_limit?(week_day, report)
+    report.overtime_milliseconds_at(week_day) >= OVERTIME_NOTIFICATION_LIMIT
   end
 
   def store_notification(email)
